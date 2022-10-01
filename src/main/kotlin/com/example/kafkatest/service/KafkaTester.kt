@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.sql.Timestamp
 import java.time.Instant
-import javax.annotation.PostConstruct
 
 @Service
 class KafkaTester(
@@ -17,12 +16,12 @@ class KafkaTester(
     private var fromListen: Timestamp? = null
     private lateinit var to: Timestamp
 
-    @PostConstruct
     fun start() {
         println("Starting test")
         from = Timestamp.from(Instant.now())
         for (i in 1 until counter) {
             println("-> [GO:$i]")
+            Thread.sleep(100)
             kafkaSender.send("GO:$i")
         }
         kafkaSender.send("END")
